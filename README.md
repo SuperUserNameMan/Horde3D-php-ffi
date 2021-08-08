@@ -25,3 +25,6 @@ See ` test_Horde3D.php `.
 - [ ] port the Horde3D C++ framework to PHP ?
 
 
+## Credits :
+
+- the `data` folder contains files from [horde3d/Horde3D](https://github.com/horde3d/Horde3D)
