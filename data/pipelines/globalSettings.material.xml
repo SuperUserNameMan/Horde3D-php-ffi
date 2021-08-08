@@ -1,0 +1,3 @@
+<Material>
+	<Sampler name="ambientMap" map="textures/out.dds" map_="textures/ambientMap.dds" />
+</Material>
