@@ -814,5 +814,19 @@ class Horde3D
 	// Helpers
 	//----------------------------------------------------------------------------------
 
+	public static function GetNodeTransform( $node )
+	{
+		$T = FFI::new("float[3]");
+		$R = FFI::new("float[3]");
+		$S = FFI::new("float[3]");
+
+		static::$ffi->h3dGetNodeTransform( $node ,
+				FFI::addr( $T[0] ) , FFI::addr( $T[1] ) , FFI::addr( $T[2] ) ,
+				FFI::addr( $R[0] ) , FFI::addr( $R[1] ) , FFI::addr( $R[2] ) ,
+				FFI::addr( $S[0] ) , FFI::addr( $S[1] ) , FFI::addr( $S[2] ) ,
+		);
+
+		return [ $T , $R , $S ];
+	}
 
 }
