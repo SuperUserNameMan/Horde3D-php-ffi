@@ -833,7 +833,7 @@ class Horde3D
 	{
 		if ( is_array( $tx ) )
 		{
-			if ( isset( $tx[0][0] ) ) // [ [ T ] , [ R ] , [ S ] ]
+			if ( count( $tx ) == 3 ) // [ [ tx,ty,tz ] , [ rx,ry,rz ] , [ sx,sy,sz ] ]
 			{
 				list( list( $tx , $ty , $tz ) , list( $rx , $ry , $rz ) , list( $sx , $sy , $sz ) ) = $tx ;
 			}
