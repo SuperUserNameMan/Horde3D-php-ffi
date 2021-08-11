@@ -829,4 +829,21 @@ class Horde3D
 		return [ $T , $R , $S ];
 	}
 
+	public static function SetNodeTransform( $node , $tx,$ty=null,$tz=null , $rx=null,$ry=null,$rz=null , $sx=null,$sy=null,$sz=null )
+	{
+		if ( is_array( $tx ) )
+		{
+			if ( isset( $tx[0][0] ) ) // [ [ T ] , [ R ] , [ S ] ]
+			{
+				list( list( $tx , $ty , $tz ) , list( $rx , $ry , $rz ) , list( $sx , $sy , $sz ) ) = $tx ;
+			}
+			else
+			{
+				list( $tx,$ty,$tz , $rx,$ry,$rz , $sx,$sy ,$sz ) = $tx ;
+			}
+		}
+
+		return static::$ffi->h3dSetNodeTransform( $node , $tx,$ty,$tz , $rx,$ry ,$rz , $sx,$sy ,$sz );
+	}
+
 }
