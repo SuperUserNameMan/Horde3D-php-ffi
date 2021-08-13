@@ -5,9 +5,8 @@ This binding can be used with [SDL2-php-ffi]( https://github.com/SuperUserNameMa
 
 Tested with PHP-cli 8.0.x under Linux.
 
-This binding reuses and tries to improve the encapsulating method from [oratoto/raylib-php-ffi](https://github.com/oraoto/raylib-php-ffi) applied to the Horde3D C API :
-
 - the Horde3D C API is encapsulated into a PHP class `Horde3D` which only contains `const` and `static` members ;
+- after ` include("./include/Horde3D.php"); ` it has to be initialized using a ` Horde3D::Horde3D(); ` ;
 - a `__callStatic()` method is used to call C functions using FFI. Example : `` Horde3D::GetVersionString(); `` ;
 - if required, it is possible to override a C function by adding a ` public static function ` with the same name into the class. This can be used to simply the C API and the usage of FFI with some functions that requires pointers.
 - for now, all Horde3D's C `struct { enum {} }` are converted into PHP as individual classes containing `const`. Example : ` H3DRenderDevice::OpenGL4 ` ... (this is because some enums share identical names with different values, so they had to be kept seperated into individual classes)
