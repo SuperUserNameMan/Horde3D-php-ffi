@@ -750,6 +750,7 @@ class H3DEXTTerrain
 	const BlockSizeI    = 10004 ;
 };
 
+
 class Horde3D
 {
 
@@ -780,34 +781,7 @@ class Horde3D
 	public static function __callStatic( $method , $args )
 	{
 		$callable = [static::$ffi, 'h3d'.$method];
-		// TODO: argument unpack segfaults
-		// return static::getFFI()->$method(...$args);
-		switch (count($args)) {
-			case 0:
-				return $callable();
-			case 1:
-				return $callable( $args[0] );
-			case 2:
-				return $callable( $args[0] , $args[1] );
-			case 3:
-				return $callable( $args[0] , $args[1] , $args[2] );
-			case 4:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] );
-			case 5:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] );
-			case 6:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] , $args[5] );
-			case 7:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] , $args[5] , $args[6] );
-			case 8:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] , $args[5] , $args[6] , $args[7] );
-			case 9:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] , $args[5] , $args[6] , $args[7] , $args[8] );
-			case 10:
-				return $callable( $args[0] , $args[1] , $args[2] , $args[3] , $args[4] , $args[5] , $args[6] , $args[7] , $args[8] , $args[9] );
-			default:
-				echo "Horde3D::__callStatic( $method , ... ) needs support for ".count( $args )." args ...".PHP_EOL;
-		}
+		return $callable(...$args);
 	}
 
 	//----------------------------------------------------------------------------------
@@ -845,5 +819,6 @@ class Horde3D
 
 		return static::$ffi->h3dSetNodeTransform( $node , $tx,$ty,$tz , $rx,$ry ,$rz , $sx,$sy ,$sz );
 	}
+
 
 }
