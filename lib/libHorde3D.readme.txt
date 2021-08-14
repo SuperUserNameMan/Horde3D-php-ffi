@@ -1,0 +1,2 @@
+Source-code origin  : https://github.com/horde3d/Horde3D
+Source-code license : Eclipse Public License v1.0 (EPL)
