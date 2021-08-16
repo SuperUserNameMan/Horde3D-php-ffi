@@ -1,5 +1,7 @@
 <?php
 
+Horde3D::Horde3D(); // autoinit
+
 //----------------------------------------------------------------------------------
 // Enumerators Definition
 //----------------------------------------------------------------------------------
@@ -770,11 +772,53 @@ class Horde3D
 	//----------------------------------------------------------------------------------
 
 	public static $ffi;
+	
+	public static $ffi_typeof_vec2;
+	public static $ffi_typeof_vec3;
+	public static $ffi_typeof_vec4;
+	
+	public static $ffi_typeof_quat;
+	
+	public static $ffi_typeof_mat4_union;
+	public static $ffi_typeof_mat4_union_p;
+	
+	public static $ffi_typeof_float_p;
 
 	public static function Horde3D()
 	{
+		if ( static::$ffi ) 
+		{ 
+			debug_print_backtrace();
+			exit("Horde3D::Horde3D() already init".PHP_EOL); 
+		}
+		
 		$cdef = __DIR__ . '/horde3d.ffi.php.h';
 		static::$ffi = FFI::load($cdef);
+		
+		static::$ffi_typeof_float_p = static::$ffi->type("float*");
+		
+		if ( class_exists( "GLM" ) )
+		{	
+			static::$ffi_typeof_vec2         =    GLM::$ffi_typeof_vec2;
+			static::$ffi_typeof_vec3         =    GLM::$ffi_typeof_vec3;
+			static::$ffi_typeof_vec4         =    GLM::$ffi_typeof_vec4;
+			
+			static::$ffi_typeof_quat         =    GLM::$ffi_typeof_quat;
+			
+			static::$ffi_typeof_mat4_union   =    GLM::$ffi->type("union Matrix4f  { float f[16] ; mat4 m ; }   ");
+			static::$ffi_typeof_mat4_union_p =    GLM::$ffi->type("union Matrix4fp { float f[16] ; mat4 m ; } * ");
+		}
+		else
+		{
+			static::$ffi_typeof_vec2         = static::$ffi->type("float[2]");
+			static::$ffi_typeof_vec3         = static::$ffi->type("float[3]");
+			static::$ffi_typeof_vec4         = static::$ffi->type("float[4]");
+			
+			static::$ffi_typeof_quat         = static::$ffi->type("float[4]");
+			
+			static::$ffi_typeof_mat4_union   = static::$ffi->type("union Matrix4f  { float f[16] ; float m[4][4] ; }   ");
+			static::$ffi_typeof_mat4_union_p = static::$ffi->type("union Matrix4fp { float f[16] ; float m[4][4] ; } * ");
+		}
 	}
 
 
@@ -790,9 +834,9 @@ class Horde3D
 
 	public static function GetNodeTransform( $node )
 	{
-		$T = FFI::new("float[3]");
-		$R = FFI::new("float[3]");
-		$S = FFI::new("float[3]");
+		$T = FFI::new( static::$ffi_typeof_vec3 );
+		$R = FFI::new( static::$ffi_typeof_vec3 );
+		$S = FFI::new( static::$ffi_typeof_vec3 );
 
 		static::$ffi->h3dGetNodeTransform( $node ,
 				FFI::addr( $T[0] ) , FFI::addr( $T[1] ) , FFI::addr( $T[2] ) ,
@@ -820,5 +864,38 @@ class Horde3D
 		return static::$ffi->h3dSetNodeTransform( $node , $tx,$ty,$tz , $rx,$ry ,$rz , $sx,$sy ,$sz );
 	}
 
+	public static function GetNodeTransMatRel( $node )
+	{
+		$Mp = static::$ffi->new( static::$ffi_typeof_mat4_union_p );
+		
+		$float_pp = FFI::addr( FFI::cast( static::$ffi_typeof_float_p , $Mp ) );
+				
+		static::$ffi->h3dGetNodeTransMats( $node , $float_pp , null );
+		
+		return $Mp[0];
+	}
 
+	public static function GetNodeTransMatAbs( $node )
+	{
+		$Mp = static::$ffi->new( static::$ffi_typeof_mat4_union_p );
+		
+		$float_pp = FFI::addr( FFI::cast( static::$ffi_typeof_float_p , $Mp ) );
+		
+		static::$ffi->h3dGetNodeTransMats( $node , null , $float_pp );
+		
+		return $Mp[0];
+	}
+	
+	public static function GetNodeTransMats( $node )
+	{
+		$Rp = static::$ffi->new( static::$ffi_typeof_mat4_union_p );
+		$Ap = static::$ffi->new( static::$ffi_typeof_mat4_union_p );
+		
+		$R_float_pp = FFI::addr( FFI::cast( static::$ffi_typeof_float_p , $Mp ) );
+		$A_float_pp = FFI::addr( FFI::cast( static::$ffi_typeof_float_p , $Ap ) );
+		
+		static::$ffi->h3dGetNodeTransMats( $node , $R_float_pp , $A_float_pp );
+		
+		return [ $Rp[0] , $Ap[0] ];
+	}
 }
