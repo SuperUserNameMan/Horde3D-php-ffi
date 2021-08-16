@@ -1,12 +1,10 @@
 <?php
 
-include("include/SDL.php");
+include_once("include/GLM.php"); // optionnal : https://github.com/SuperUserNameMan/cglm-php-ffi
 
-SDL::SDL();
+include_once("include/SDL.php"); // required  : https://github.com/SuperUserNameMan/SDL2-php-ffi
 
-include("include/Horde3D.php");
-
-Horde3D::Horde3D();
+include_once("include/Horde3D.php");
 
 use Horde3D as H3D;
 
