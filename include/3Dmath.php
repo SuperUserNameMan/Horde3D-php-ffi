@@ -13,6 +13,10 @@
 	- Intersection::RayAABB()
 
 	- Vec3f::DistToAABB()
+	 
+	 
+	Best performance if JIT is enabled on PHP8.x !
+	If compiled on 64 bits plateform, PHP actually uses `double`.
 */
 
 //==============================================================================
@@ -742,9 +746,23 @@ class Matrix4f
 		{
 			if ( count( $M ) <= 4 )
 			{
-				$this->SetWithQuaternion( $M );
+				if ( ! is_countable( $M[0] ) )
+				{
+					$this->SetWithQuaternion( $M );
+				}
+				else
+				{
+					for( $r = 0 ; $r < 4 ; $r++ )
+					{
+						for( $c = 0 ; $c < 4 ; $c ++ )
+						{
+							$this->c[ $r ][ $c ] = $M[ $r ][ $c ] ;
+						}
+					}
+				}
 			}
 			else
+			if ( count( $M ) == 16 )
 			{
 				$i = 0 ;
 				for( $r = 0 ; $r < 4 ; $r++ )
@@ -754,6 +772,10 @@ class Matrix4f
 						$this->c[ $r ][ $c ] = $M[ $i++ ] ;
 					}
 				}
+			}
+			else
+			{
+				print("Warning : Matrix4f::Set() param is Array with count(".count($M).").".PHP_EOL);
 			}
 		}
 		else
@@ -766,7 +788,7 @@ class Matrix4f
 					{
 						for( $c = 0 ; $c < 4 ; $c ++ )
 						{
-							$this->c[ $r ][ $c ] = $M[ $r][ $c ];
+							$this->c[ $r ][ $c ] = $M->c[ $r][ $c ];
 						}
 					}
 				break;
@@ -851,7 +873,7 @@ class Matrix4f
 		{
 			for( $c = 0 ; $c < 4 ; $c ++ )
 			{
-				$this->c[ $r ][ $c ] += $M[ $r ][ $c ];
+				$this->c[ $r ][ $c ] += $M->c[ $r ][ $c ];
 			}
 		}
 
@@ -866,7 +888,7 @@ class Matrix4f
 		{
 			for( $c = 0 ; $c < 4 ; $c ++ )
 			{
-				$this->c[ $r ][ $c ] -= $M[ $r ][ $c ];
+				$this->c[ $r ][ $c ] -= $M->c[ $r ][ $c ];
 			}
 		}
 
@@ -925,7 +947,7 @@ class Matrix4f
 			]);
 		}
 		else
-		if ( Matrix4f::is_quaternion( $B ) )
+		if ( Quaternion::is_quaternion( $B ) )
 		{
 			exit("Matrix4f::Mult( Quaternion ) not implemented");
 		}
@@ -1002,7 +1024,7 @@ class Matrix4f
 	{
 		for( $Y = 0 ; $Y < 4 ; $Y++ )
 		{
-			for( $X = 0 ; $X < 4 ; $X++ )
+			for( $X = $Y+1 ; $X < 4 ; $X++ )
 			{
 				$tmp = $this->c[ $X ][ $Y ];
 
