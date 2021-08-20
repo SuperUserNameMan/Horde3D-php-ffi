@@ -17,6 +17,11 @@ It is made compatible with this [cglm-php-ffi](https://github.com/SuperUserNameM
 
 See ` test_Horde3D.php `.
 
+## Note regarding performance :
+
+- my experience shown that the encapsulation technic based uppon `__staticClass()` gives low performances with PHP8.0.8 when accessing FFI C-API, this even if PHP-JIT is enabled.
+- for maximum best top notch super ultra giga performance, it is prefered to call the FFI C-API at the lowest level using ` Horde3D::$ffi->h3d....(...) `. 
+
 ## TODO :
 
 - [ ] port to Windows
