@@ -793,7 +793,18 @@ class Horde3D
 		}
 		
 		$cdef = __DIR__ . '/horde3d.ffi.php.h';
-		static::$ffi = FFI::load($cdef);
+		
+		$lib_dir = defined('FFI_LIB_DIR') ? FFI_LIB_DIR : 'lib' ;
+		
+		$slib = "./$lib_dir/".match( PHP_OS_FAMILY ) 
+		{
+			'Linux'   => 'libHorde3D.so',
+			'Windows' => 'libHorde3D.dll',
+		};
+		
+		static::$ffi = FFI::cdef( file_get_contents( $cdef ) , $slib );
+		
+		// ----
 		
 		static::$ffi_typeof_float_p = static::$ffi->type("float*");
 		
