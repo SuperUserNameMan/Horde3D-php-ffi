@@ -1,4 +1,4 @@
-#define FFI_LIB "./lib/libHorde3D.so"
+// #define FFI_LIB "./lib/libHorde3D.so"
 
 // *************************************************************************************************
 //
@@ -2647,6 +2647,8 @@ void h3dShowFrameStats( H3DRes fontMaterialRes, H3DRes panelMaterialRes, int mod
 //
 // *************************************************************************************************
 
+// TODO ?
+
 /*	Title: Horde3D ExternalTexture Extension */
 
 
@@ -2671,7 +2673,7 @@ void h3dShowFrameStats( H3DRes fontMaterialRes, H3DRes panelMaterialRes, int mod
 	Returns:
 		 true in case of success, false otherwise
 */
-bool h3dextImportTexture( H3DRes texRes, int texID );
+//bool h3dextImportTexture( H3DRes texRes, int texID ); // TODO ?
 
 /* Function: h3dextGetGLTextureID
 		Retrieve the native OpenGL Texture name of a Horde3D texture resource
@@ -2688,6 +2690,6 @@ bool h3dextImportTexture( H3DRes texRes, int texID );
 	Returns:
 		 the OpenGL texture name (uint32)
 */
-int h3dextGetGLTextureID( H3DRes texRes );
+//int h3dextGetGLTextureID( H3DRes texRes ); // TODO ?
 
 //EOF//
