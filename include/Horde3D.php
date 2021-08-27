@@ -796,11 +796,7 @@ class Horde3D
 		
 		$lib_dir = defined('FFI_LIB_DIR') ? FFI_LIB_DIR : 'lib' ;
 		
-		$slib = "./$lib_dir/".match( PHP_OS_FAMILY ) 
-		{
-			'Linux'   => 'libHorde3D.so',
-			'Windows' => 'libHorde3D.dll',
-		};
+		$slib = "./$lib_dir/libHorde3D.".PHP_SHLIB_SUFFIX;
 		
 		static::$ffi = FFI::cdef( file_get_contents( $cdef ) , $slib );
 		
